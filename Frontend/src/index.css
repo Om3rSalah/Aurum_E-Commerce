@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import "tailwindcss";
+
+
+/* ==========================================
+   Custom Scrollbar for AURUM Design System
+   ========================================== */
+
+/* 1. للعرض والارتفاع بتاع الـ Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;  /* سمك الشريط الرأسي (رفيع وشيك) */
+  height: 8px; /* ارتفاع الشريط الأفقي */
+}
+
+/* 2. خلفية المسار اللي بيتحرك فيه السكرول (Track) */
+::-webkit-scrollbar-track {
+  background: #f4f4f7; /* رمادي خفيف جداً ناعم */
+  border-radius: 10px;
+}
+
+/* 3. الجزء المتحرك نفسه (Thumb) */
+::-webkit-scrollbar-thumb {
+  background: #777587; /* اللون الرمادي الاحترافي اللي طلبته */
+  border-radius: 10px;
+  border: 2px solid #f4f4f7; /* مسافة بصرية خفيفة لإعطاء مظهر عصري */
+  transition: background 0.3s ease;
+}
+
+/* 4. شكل السكرول لما المستخدم يقف عليه بالماوس (Hover) */
+::-webkit-scrollbar-thumb:hover {
+  background: #3525cd; /* يتحول للون البراند الرئيسي عند التفاعل */
+}
+
+/* 5. دعم المتصفحات الحديثة (Firefox) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #777587 #f4f4f7;
+}
+
+* {
+box-sizing: border-box;
+text-decoration: none !important;
+font-family: "Plus Jakarta Sans", sans-serif;
+}
