@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import User from '../model/user.model.js';
 import "dotenv/config";
+import prisma from '../config/db.js';
 
 export const protectRoute = async (req , res , next) => {
     try{
@@ -14,7 +14,9 @@ export const protectRoute = async (req , res , next) => {
         if(!decoded) return res.status(400).json({ message:" Unauthorized- Invalid token "});
 
         // geting the user
-        const user = await User.findById(decoded.userId);
+        const user = await prisma.user.findUnique({
+            where:{ id: decoded.userId },
+        })
 
         req.user = user;
         next();

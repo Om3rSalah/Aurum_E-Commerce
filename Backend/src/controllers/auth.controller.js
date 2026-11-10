@@ -1,13 +1,13 @@
-import User from '../model/user.model.js';
 import { generateToken } from "../config/jwt.js";
 import bcrypt from "bcryptjs";
+import prisma from '../config/db.js';
 
 
 export const signup = async ( req , res ) => {
     try{
-        const { username , email , password } = req.body;
+        const { firstName , lastName , email , password , phone } = req.body;
         // Make sure all the field are full 
-        if(!username || !email || !password){
+        if(!firstName || !lastName  || !email || !password ||!phone){
             return res.status(400).json({message : "All fields are required"})
         }
         // Checking if the password is valid
@@ -22,11 +22,13 @@ export const signup = async ( req , res ) => {
             return res.status(400).json({errType:"email", message: "Enter a vaild email please "})
         }
         
-        const newUserEmail = await User.findOne({email: email.toLowerCase()});
+        const ExistingEmail = await prisma.user.findUnique({
+            where: { email: email }
+        });
 
 
         // Make sure that email is unique
-        if(newUserEmail) return res.status(400).json({message : "Email is already exist"});
+        if(ExistingEmail) return res.status(400).json({message : "Email is already exist"});
 
         
         // Make incrypting the password 
@@ -34,18 +36,28 @@ export const signup = async ( req , res ) => {
         const hashPassword = await bcrypt.hash(password,salt);
 
         // creating the new user
-        const newUser = await User.create({ 
-        username: username , 
-        email: email.toLowerCase() , 
-        password: hashPassword 
-    });
+        const newUser = await prisma.user.create({
+            data:{
+                firstName:firstName,
+                lastName : lastName,
+                email:email.toLowerCase(),
+                passwordHash:hashPassword,
+                phone:phone
+            },
+            select:{
+                firstName:true,
+                lastName:true,
+                email:true,
+                phone:true,
+            }
+        })
         generateToken(newUser._id , res);
 
-        // removing the password
-        const user = newUser.toObject();
-        delete user.password;
-        // Sending The User Data 
-        return res.status(201).json( user );
+        // // removing the password
+        // const user = newUser.toObject();
+        // delete user.password;
+        // // Sending The User Data 
+        return res.status(201).json( newUser );
 
 
 
@@ -65,20 +77,25 @@ export const login = async ( req , res ) => {
             return res.status(400).json({message : "All fields are required"})
         }
 
-        const user  = await User.findOne({email:email.toLowerCase()}).lean();
+        const user  = await prisma.user.findUnique({
+            where: { email: email.toLowerCase() }
+        })
         // checking if the email exists 
         if(!user) return res.status(400).json({message:"Invalid information"});
 
         // checking if the password is correct 
-        const isPasswordCorrect = await bcrypt.compare(password , user.password);
+        const isPasswordCorrect = await bcrypt.compare(password , user.passwordHash);
         if(!isPasswordCorrect) return res.status(400).json({message:"Invalid information"});
 
-        generateToken(user._id,res);
+        generateToken(user.id,res);
 
-        delete user.password;
         
 
-        return res.status(200).json( user );
+        return res.status(200).json({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email
+        });
 
     }catch(err){
         res.status(500).json({message: 'Server Error',err});
