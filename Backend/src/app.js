@@ -1,6 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-
+import productRoutes from './routes/product.routes.js';
 import "dotenv/config";
 import path from "path"
 import authRoutes from './routes/auth.routes.js';
@@ -21,6 +21,7 @@ app.use(cookieParser());
 
 // routes
 app.use("/api/auth" , authRoutes);
+app.use("/api/product", productRoutes);
 
 
 // make it ready from deployment

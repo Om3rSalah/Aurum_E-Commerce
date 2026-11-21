@@ -185,6 +185,7 @@ model Product {
   name        String
   slug        String           @unique // رابط فريد مثل: /products/premium-casual-shirt
   description String?
+  rating      Decimal          @db.Decimal(10, 2) @default(0.00) @map("rating") 
   basePrice   Decimal          @map("base_price") @db.Decimal(10, 2)
   isFeatured  Boolean          @default(false) @map("is_featured") // لعرضه في الواجهة الرئيسية كمنتج مميز
   isArchived  Boolean          @default(false) @map("is_archived") // بدلاً من حذفه نهائياً

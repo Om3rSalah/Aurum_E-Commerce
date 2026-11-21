@@ -4,19 +4,21 @@ import { Eye, EyeOff, Mail, Phone, Calendar } from 'lucide-react';
 import { BiSolidCheckShield } from "react-icons/bi";
 import { MdLockOutline, MdLock } from "react-icons/md";
 import { FaShield } from "react-icons/fa6";
+import { useAuthStore } from '../../../Store/useAuthStore';
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const { signUp } = useAuthStore();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
-    mobile: '',
-    birthday: '',
+    phone: '',
     subscribe: true,
     agreeTerms: false,
   });
+  
 
   // دالة حساب قوة كلمة السر
   const getPasswordStrength = (pass) => {
@@ -46,7 +48,7 @@ export default function SignUpForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Submitted:', formData);
+        signUp(formData);
   };
 
   return (
@@ -186,7 +188,7 @@ export default function SignUpForm() {
         </div>
 
         {/* Mobile Phone & Birthday */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="gap-4">
           <div className="space-y-1">
             <div className="flex justify-between text-[11px]">
               <label className="font-bold text-gray-700">Mobile Phone</label>
@@ -196,30 +198,15 @@ export default function SignUpForm() {
               <Phone size={15} className="absolute left-3.5 top-1/2 translate-y-[-50%] text-gray-400" />
               <input
                 type="tel"
-                placeholder="+1 (555) 000-0000"
-                value={formData.mobile}
-                onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                placeholder="+20 123 456 7890"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 className="w-full pl-10 pr-3.5 py-3 text-sm bg-indigo-50 border border-transparent rounded-md focus:bg-white focus:border-[#3525cd] outline-none transition-all"
               />
             </div>
           </div>
 
-          <div className="space-y-1">
-            <div className="flex justify-between text-[11px]">
-              <label className="font-bold text-gray-700">Birthday</label>
-              <span className="text-[#3525cd] text-[10px] font-semibold">Anniversary Gift</span>
-            </div>
-            <div className="relative">
-              <Calendar size={15} className="absolute left-3.5 top-1/2 translate-y-[-50%] text-gray-400" />
-              <input
-                type="date"
-                placeholder="mm/dd/yyyy"
-                value={formData.birthday}
-                onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
-                className="w-full pl-10 pr-3.5 py-3 text-sm bg-indigo-50 border border-transparent rounded-md focus:bg-white focus:border-[#3525cd] outline-none transition-all"
-              />
-            </div>
-          </div>
+          
         </div>
 
         {/* Checkboxes */}
@@ -253,6 +240,7 @@ export default function SignUpForm() {
         {/* Submit Button */}
         <button
           type="submit"
+          onClick={handleSubmit}
           className="w-full bg-indigo-700 hover:bg-indigo-500 text-white text-sm font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-md shadow-indigo-100 cursor-pointer mt-2"
         >
           <span>Create Account</span>

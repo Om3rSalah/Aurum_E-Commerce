@@ -1,5 +1,5 @@
 import React from 'react';
-import { useProductFilterStore } from '../../Store/useProductFilterStore';
+import { useProductFilterStore } from '../../../Store/useProductFilterStore';
 import { LayoutGrid, LayoutList } from 'lucide-react';
 
 export default function CatalogHeader() {

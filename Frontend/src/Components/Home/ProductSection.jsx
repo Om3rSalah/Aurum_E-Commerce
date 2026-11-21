@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Star, Heart, ShoppingBag, Plus, Minus, Truck, RotateCcw, ShieldCheck } from 'lucide-react';
 
 
-export default function ProductSection() {
+export default function ProductSection({ product }) {
+
   // Product Images Array
   const images = [
     'https://lh3.googleusercontent.com/aida-public/AB6AXuDaBNp7P9OxHvq6wIALGzK5Fc04ZOSXJt6dZZqNWcUl2d8bfHB52NHauZEb4raehVjN39SntWDc1PfP1y44glSrUN7IhmKdFY2LN0aQi2aUIq4slDbIZYuFKxHP4FdN2tXUHifGX90B2bDDPwXxWqg1zJikbe2SHLfOM-Wz58n17dSOZWnFXbIxb5vOzqc-YtnuZ7atSj00tUgyNr0cwiTgHzVSdU0X6wJtpaEvYxovoq12odGBbP8U',
@@ -13,20 +14,13 @@ export default function ProductSection() {
 
   // Interactive States
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedColor, setSelectedColor] = useState('Navy Blue');
+  const [selectedColor, setSelectedColor] = useState(product.variants[0].color);
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
-  // Available Options Data
-  const colors = [
-    { name: 'Navy Blue', class: 'bg-[#1e2952]' },
-    { name: 'Dark Green', class: 'bg-[#2d4a3e]' },
-    { name: 'Black', class: 'bg-[#18181b]' },
-    { name: 'Terracotta', class: 'bg-[#8c3a2b]' },
-  ];
+  
 
-  const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7">
@@ -38,7 +32,7 @@ export default function ProductSection() {
             
             {/* Thumbnails List */}
             <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-auto">
-              {images.map((img, idx) => (
+              {product.images.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
@@ -46,7 +40,7 @@ export default function ProductSection() {
                     selectedImage === idx ? '' : 'border-transparent opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                  <img src={img.imageUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -58,18 +52,12 @@ export default function ProductSection() {
                 BEST SELLER
               </span>
 
-              {/* Favorite Wishlist Icon Button */}
-              <button
-                onClick={() => setIsWishlisted(!isWishlisted)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-gray-700 hover:text-red-500 transition-colors shadow-sm cursor-pointer"
-              >
-                <Heart size={18} className={isWishlisted ? 'fill-red-500 text-red-500' : ''} />
-              </button>
+              
 
               {/* Main Image Display */}
               <img
-                src={images[selectedImage]}
-                alt="Premium Casual Shirt"
+                src={product.images[selectedImage].imageUrl}
+                alt={product.name}
                 className="w-full h-full object-cover object-top transition-all duration-300"
               />
             </div>
@@ -84,7 +72,7 @@ export default function ProductSection() {
                 MENSWEAR • PREMIUM TAILORING
               </p>
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 mt-1">
-                Premium Casual Shirt
+                { product.name }
               </h1>
             </div>
 
@@ -95,17 +83,14 @@ export default function ProductSection() {
                   <Star key={i} size={16} className="fill-indigo-700 " />
                 ))}
               </div>
-              <span className="text-sm font-bold text-gray-900">4.8</span>
+              <span className="text-sm font-bold text-gray-900">{ product.rating }</span>
               <span className="text-xs text-gray-400 font-medium">(128 verified reviews)</span>
             </div>
 
             {/* Price Display */}
             <div className="flex items-baseline gap-3">
-              <span className="text-4xl font-bold text-gray-900">$49.99</span>
-              <span style={{ textDecoration: 'line-through' }} className="text-lg text-[#777587] line-through font-medium relative ">$69.99 <div className='h-0.5 w-full bg-[#777587] absolute top-1/2 left-0'></div></span>
-              <span className="bg-indigo-50 text-indgo-bg-indigo-700 text-xs font-bold px-2.5 py-1 rounded-md">
-                29% OFF
-              </span>
+              <span className="text-4xl font-bold text-gray-900">${ Number(product.variants[0].price).toFixed(2)}</span>
+              <span style={{ textDecoration: 'line-through' }} className="text-lg text-[#777587] line-through font-medium relative "></span>
             </div>
 
             {/* Color Selection */}
@@ -114,12 +99,13 @@ export default function ProductSection() {
                 Color: <span className="font-bold text-gray-900">{selectedColor}</span>
               </span>
               <div className="flex items-center gap-3">
-                {colors.map((color) => (
+                {[...new Map(product.variants.map(variant => [variant.color , variant.colorHex ]))].map((color,idx) => (
                   <button
-                    key={color.name}
-                    onClick={() => setSelectedColor(color.name)}
-                    className={`w-8 h-8 rounded-full ${color.class} transition-all cursor-pointer ${
-                      selectedColor === color.name ? 'ring-2 ring-offset-2 ring-indigo-700 scale-110' : 'hover:scale-105'
+                    key={idx}
+                    style={{ backgroundColor: color[1] }}
+                    onClick={() => setSelectedColor(color[0])}
+                    className={`w-8 h-8 rounded-full  transition-all cursor-pointer ${
+                      selectedColor === color[0] ? 'ring-2 ring-offset-2 ring-indigo-700 scale-110' : 'hover:scale-105'
                     }`}
                   />
                 ))}
@@ -135,19 +121,19 @@ export default function ProductSection() {
                 </button>
               </div>
               <div className="flex items-center gap-2.5">
-                {sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`w-11 h-11 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      selectedSize === size
-                        ? 'bg-indigo-700 text-white shadow-md shadow-indigo-100'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
+              {[...new Set(product.variants.map(variant => variant.size))].map(size => (
+                <button
+                  key={size}
+                  onClick={() => setSelectedSize(size)}
+                  className={`w-11 h-11 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    selectedSize === size
+                      ? 'bg-indigo-700 text-white shadow-md shadow-indigo-100'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
               </div>
             </div>
 
@@ -178,12 +164,7 @@ export default function ProductSection() {
                   <ShoppingBag size={18} />
                   <span>Add to Cart</span>
                 </button>
-                <button
-                  onClick={() => setIsWishlisted(!isWishlisted)}
-                  className="p-3.5 bg-gray-100 hover:bg-gray-200 rounded-2xl text-gray-700 transition-colors cursor-pointer"
-                >
-                  <Heart size={20} className={isWishlisted ? 'fill-red-500 text-red-500' : ''} />
-                </button>
+                
               </div>
 
               <button className="w-full bg-indigo-50/80 hover:bg-indigo-100 text-indgo-bg-indigo-700 text-xs font-bold py-3 rounded-2xl transition-colors cursor-pointer">

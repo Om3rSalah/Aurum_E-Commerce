@@ -4,18 +4,21 @@ import { Eye, EyeOff, Mail, Lock, Sparkles, Award, ShieldCheck, Zap } from 'luci
 import { BiSolidCheckShield } from "react-icons/bi";
 import { MdLock } from "react-icons/md";
 import { FaShield } from "react-icons/fa6";
+import { useAuthStore } from '../../Store/useAuthStore';
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuthStore();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     keepMeSignedIn: true,
   });
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Login Submitted:', formData);
+    login(formData);
   };
 
   return (

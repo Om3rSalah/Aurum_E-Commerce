@@ -13,6 +13,7 @@ export const protectRoute = async (req , res , next) => {
         const decoded = jwt.verify(token , process.env.JWT_SECRET);
         if(!decoded) return res.status(400).json({ message:" Unauthorized- Invalid token "});
 
+
         // geting the user
         const user = await prisma.user.findUnique({
             where:{ id: decoded.userId },

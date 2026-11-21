@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useProductStore } from '../../../Store/useProductStore';
 
 export default function CompleteTheLook() {
   // Wishlist state for individual items
   const [wishlist, setWishlist] = useState({});
+  const { homeAccessories , getAllAccessories } = useProductStore();
+  console.log(homeAccessories)
 
   const toggleWishlist = (id) => {
     setWishlist((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
+  useEffect(() =>{
+    getAllAccessories();
+  },[])
 
   // Recommended look items data
   const lookItems = [
@@ -61,30 +68,16 @@ export default function CompleteTheLook() {
 
         {/* Recommended Look Items Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {lookItems.map((item) => (
+          {homeAccessories?.map((item) => (
             <div key={item.id} className="group cursor-pointer">
               
               {/* Product Image Box */}
               <div className="relative aspect-[4/3] sm:aspect-square bg-[#f4f2ee] rounded-2xl overflow-hidden mb-4">
-                {/* Wishlist Button */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleWishlist(item.id);
-                  }}
-                  aria-label="Save item"
-                  className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-gray-700 hover:text-red-500 transition-colors shadow-sm cursor-pointer"
-                >
-                  <Heart
-                    size={15}
-                    className={wishlist[item.id] ? 'fill-red-500 text-red-500' : ''}
-                  />
-                </button>
-
+                
                 {/* Image */}
                 <img
-                  src={item.image}
-                  alt={item.title}
+                  src={item.images[0].imageUrl}
+                  alt={item.name}
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -92,13 +85,13 @@ export default function CompleteTheLook() {
               {/* Product Details */}
               <div className="space-y-1">
                 <span className="text-[11px] font-semibold text-gray-400 block">
-                  {item.category}
+                  {item.category.name}
                 </span>
                 <h3 className="text-sm font-semibold text-gray-900 group-hover:text-[#3525cd] transition-colors line-clamp-1">
-                  {item.title}
+                  {item.name}
                 </h3>
                 <p className="text-sm font-bold text-gray-900 pt-0.5">
-                  {item.price}
+                  ${Number(item.basePrice).toFixed(2)}
                 </p>
               </div>
 
