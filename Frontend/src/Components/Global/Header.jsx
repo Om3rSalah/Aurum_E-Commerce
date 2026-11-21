@@ -2,6 +2,8 @@ import React from 'react'
 import { Link , NavLink } from 'react-router-dom';
 import './Header.css';
 import { Search,  ShoppingBag } from 'lucide-react';
+import { FaRegUser } from "react-icons/fa";
+
 
 export default function Header() {
   return (
@@ -40,12 +42,12 @@ export default function Header() {
               <input
                 type="text"
                 placeholder="Search clothing, essentials..."
-                className="w-full pl-9 pr-4 py-2 text-sm bg-indigo-50  focus:border-1 border-indigo-700 outline-0 rounded-full duration-300 focus:bg-white transition-all"
+                className="w-full pl-9 pr-4 py-2 text-sm bg-indigo-50  focus:border border-indigo-700 outline-0 rounded-full duration-300 focus:bg-white transition-all"
               />
             </div>
 
             {/* Cart */}
-            <button className="text-gray-700 hover:text-indigo-700 transition-colors relative">
+            <button className="text-gray-700 cursor-pointer rounded-xl hover:text-indigo-700 transition-colors relative">
               <ShoppingBag size={20} />
               <span className="absolute -top-1.5 -right-2 bg-indigo-700 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                 3
@@ -53,12 +55,8 @@ export default function Header() {
             </button>
 
             {/* Profile Pic */}
-            <div className="w-9 h-9 rounded-full overflow-hidden border border-gray-300">
-              <img 
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces" 
-                alt="User Profile" 
-                className="w-full h-full object-cover"
-              />
+            <div className="w-9 h-9 rounded-full flex justify-center items-center overflow-hidden  hover:text-indigo-700 transition-colors cursor-pointer ">
+              <FaRegUser size={20} />
             </div>
 
           </div>

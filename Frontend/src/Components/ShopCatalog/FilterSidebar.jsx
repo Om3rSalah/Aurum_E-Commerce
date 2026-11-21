@@ -1,5 +1,5 @@
 import React from 'react';
-import { useProductFilterStore } from "../../Store/useProductFilterStore";
+import { useProductFilterStore } from "../../../Store/useProductFilterStore";
 import { SlidersHorizontal } from 'lucide-react';
 
 export default function FilterSidebar() {

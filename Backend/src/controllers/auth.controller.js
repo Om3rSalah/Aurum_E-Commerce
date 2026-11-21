@@ -5,11 +5,15 @@ import prisma from '../config/db.js';
 
 export const signup = async ( req , res ) => {
     try{
-        const { firstName , lastName , email , password , phone } = req.body;
+        const { firstName , lastName , email , password , phone , subscribe , agreeTerms } = req.body;
         // Make sure all the field are full 
         if(!firstName || !lastName  || !email || !password ||!phone){
             return res.status(400).json({message : "All fields are required"})
-        }
+        }   
+
+
+        if(!agreeTerms) return res.status(400).json({message : "You must agree to the terms and conditions"});
+
         // Checking if the password is valid
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
         if(!passwordRegex.test(password)){
@@ -43,21 +47,17 @@ export const signup = async ( req , res ) => {
                 email:email.toLowerCase(),
                 passwordHash:hashPassword,
                 phone:phone
-            },
-            select:{
-                firstName:true,
-                lastName:true,
-                email:true,
-                phone:true,
             }
         })
-        generateToken(newUser._id , res);
+        generateToken(newUser.id , res);
 
-        // // removing the password
-        // const user = newUser.toObject();
-        // delete user.password;
-        // // Sending The User Data 
-        return res.status(201).json( newUser );
+
+        return res.status(201).json( {
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            email: newUser.email,
+            phone: newUser.phone
+        } );
 
 
 

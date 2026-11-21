@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductCard from './ProductCard';
-import { useProductFilterStore } from '../../Store/useProductFilterStore';
+import { useProductFilterStore } from '../../../Store/useProductFilterStore';
 
 export default function ProductGrid() {
   const { viewMode } = useProductFilterStore();

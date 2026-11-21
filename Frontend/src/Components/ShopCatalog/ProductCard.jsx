@@ -1,6 +1,6 @@
 import React from 'react';
 import { Heart, Star } from 'lucide-react';
-import { useProductFilterStore } from '../../Store/useProductFilterStore';
+import { useProductFilterStore } from '../../../Store/useProductFilterStore';
 
 export default function ProductCard({ product }) {
   const { viewMode } = useProductFilterStore();
