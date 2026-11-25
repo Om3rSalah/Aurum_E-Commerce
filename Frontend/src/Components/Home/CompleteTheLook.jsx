@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useProductStore } from '../../../Store/useProductStore';
+import { Link } from 'react-router-dom';
 
 export default function CompleteTheLook() {
   // Wishlist state for individual items
   const [wishlist, setWishlist] = useState({});
   const { homeAccessories , getAllAccessories } = useProductStore();
-  console.log(homeAccessories)
+
 
   const toggleWishlist = (id) => {
     setWishlist((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -16,37 +17,6 @@ export default function CompleteTheLook() {
     getAllAccessories();
   },[])
 
-  // Recommended look items data
-  const lookItems = [
-    {
-      id: 1,
-      category: 'Footwear',
-      title: 'Architect Leather Sneakers',
-      price: '$115.00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBoEaFKvweXii08w3GB--M7o4JRob2FunBo9PcX6d23MNav9q8pig5S_zzLU-McXbl-Yq707TR3jS4xOjmMO5GXUrwAQd9SysA5YOjTvq8MLn1qsawZajdNRgnsELd7DGP2VcWXPt171lA3ludQzHCwpngv4SnMczzJ21j3yjDfY-mjmnBkvBYQ4LxfgF5Klkn8yCIhVyqEdUjUgbNsxEGTfUncHgF82CPPaHo8DajznD6WW_rsEmne',
-    },
-    {
-      id: 2,
-      category: 'Leather Goods',
-      title: 'Cognac Saddle Leather Belt',
-      price: '$42.00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC3lPTx1cxOL_tqMnGLZa-kV1rM-KIitRGwpRm_yvOvIUMeRGQDup-GVTSF0CUt9pzUJBOgnfS7kZAV8OEHGpm_hYFHrn0zoO-gqxVPdeMIJc8y_P2YRGpDoXdTJXDPiuh7nBNs-3w2BODZ3TsOqFQWz29BJERVhB4eiYQy-4-01pHDBY5rv9P4iK_VR9Jxjm2yPM39kifeTJ-dMVGqO7CdYN4rux2dH6fLAE2PL5cJxm0ROuuzwd22',
-    },
-    {
-      id: 3,
-      category: 'Eyewear',
-      title: 'Nordic Acetate Frames',
-      price: '$68.00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCaBB9Kgg8KPvVmX2m8VX9sxVOnrmbkxvW99jiiyOXY3vnx18NBnL4YDBZ77EadJn0ZxffOW5cSJJWAUTbN982KaRzKBfY538hyQTMn764sUuiWeLZ5ROOzeE4r7SI72eN0QF6XjKfwX1WDca1oi1Kn6s-EanUN6OTbWXXt700i4-eDW0KbgzRlQp05cDMOTVf-LK_Z42csxrpJvpIPaA5kpTX0mskW0xIxMAe0NH-aURqTEgb61mZ7',
-    },
-    {
-      id: 4,
-      category: 'Carry Essentials',
-      title: 'Structure Canvas Tote',
-      price: '$38.00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDxk0CpPUUwc4McXxzBwh9thErQtsj9K358VisfKZPK2TRJoepzo8-ej21V6IAbA1U9J3BxQe9e0Nk_F9ZUgHDl-T9cfZozjh2LcEMKBrqfUo9Penp1f4ZXuh3LKf2D3Gv5_v85g7JIqbepBebjld4lWOC-4uzLojYT8gEjA9mhUaXzDuBuoyA7WYEGT5AGvAV6GCvJ1Zq_C2CAqUYe4qpHfCbbyrAtz-A_SvfWV5kV0wZXkQQua7nL',
-    },
-  ];
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -69,7 +39,7 @@ export default function CompleteTheLook() {
         {/* Recommended Look Items Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {homeAccessories?.map((item) => (
-            <div key={item.id} className="group cursor-pointer">
+            <Link key={item.id} to={`/shop/${item.slug}`} className="group cursor-pointer">
               
               {/* Product Image Box */}
               <div className="relative aspect-[4/3] sm:aspect-square bg-[#f4f2ee] rounded-2xl overflow-hidden mb-4">
@@ -95,7 +65,7 @@ export default function CompleteTheLook() {
                 </p>
               </div>
 
-            </div>
+            </Link>
           ))}
         </div>
 

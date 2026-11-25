@@ -37,7 +37,6 @@ export default function CuratedCategories() {
           return (
             <Link
               key={category.id}
-              to={category.path}
               className={`group relative flex flex-col items-center justify-center p-6 bg-white rounded-2xl border transition-all duration-300 ${
                 category.active 
                   ? 'border-[#3525cd] shadow-sm' 

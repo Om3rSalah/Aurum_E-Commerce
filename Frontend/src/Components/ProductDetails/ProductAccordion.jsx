@@ -22,12 +22,7 @@ export default function ProductAccordion({ description, fabric, shipping }) {
         </button>
         {openSection === 'description' && (
           <div className="p-4 text-xs text-gray-600 space-y-2 leading-relaxed">
-            <p>{description.text}</p>
-            <ul className="list-disc pl-4 space-y-1">
-              {description.points.map((point, index) => (
-                <li key={index}>{point}</li>
-              ))}
-            </ul>
+            <p>{description}</p>
           </div>
         )}
       </div>

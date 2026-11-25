@@ -3,8 +3,8 @@ import { Star, Heart, Truck, RotateCcw, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function ProductInfo({ product }) {
-  const [selectedColor, setSelectedColor] = useState(product.colors[0].name);
-  const [selectedSize, setSelectedSize] = useState('L');
+  const [selectedColor, setSelectedColor] = useState(product.variants[0].color);
+  const [selectedSize, setSelectedSize] = useState(product.variants[0].size);
   const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = () => {
@@ -18,15 +18,15 @@ export default function ProductInfo({ product }) {
       <div className="space-y-2 border-b border-gray-100 pb-5">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-bold uppercase tracking-widest text-[#3525cd] bg-indigo-50 px-3 py-1 rounded-full">
-            {product.category}
+            {product.category.name}
           </span>
           <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            {product.stockStatus}
+            In Stock
           </span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
-          {product.title}
+          {product?.name}
         </h1>
         <div className="flex items-center gap-2 pt-1">
           <div className="flex items-center text-amber-500">
@@ -35,14 +35,14 @@ export default function ProductInfo({ product }) {
             ))}
           </div>
           <span className="text-xs font-bold text-gray-800">{product.rating}</span>
-          <span className="text-xs text-gray-400">({product.reviewsCount} reviews)</span>
+          <span className="text-xs text-gray-400 font-medium">(0 verified reviews)</span>
         </div>
       </div>
 
       {/* Price */}
       <div className="flex items-baseline gap-3">
-        <span className="text-3xl font-bold text-gray-900">${product.price}</span>
-        {product.originalPrice && (
+        <span className="text-3xl font-bold text-gray-900">${Number(product.basePrice).toFixed(2)}</span>
+        {/* {product.originalPrice && (
           <span className="text-sm text-gray-500 relative " style={{ textDecoration: 'line-through' }}> <div className='h-0.5 w-full bg-[#777587] absolute top-1/2 left-0'></div>
             ${product.originalPrice}
           </span>
@@ -51,7 +51,7 @@ export default function ProductInfo({ product }) {
           <span className="text-xs font-bold bg-indigo-50 text-[#3525cd] px-2.5 py-1 rounded-md">
             {product.discount} OFF
           </span>
-        )}
+        )} */}
       </div>
 
       {/* Color Swatches */}
@@ -60,12 +60,13 @@ export default function ProductInfo({ product }) {
           <span>Color: <span className="text-gray-500 font-normal">{selectedColor}</span></span>
         </div>
         <div className="flex gap-3">
-          {product.colors.map((color) => (
+          {[...new Map(product.variants.map(variant => [variant.color , variant.colorHex ]))].map((color,idx) => (
             <button
-              key={color.name}
-              onClick={() => setSelectedColor(color.name)}
-              className={`w-8 h-8 rounded-full ${color.bg} relative flex items-center justify-center transition-transform hover:scale-110 cursor-pointer ${
-                selectedColor === color.name ? 'ring-2 ring-offset-2 ring-[#3525cd]' : ''
+              key={color[0]}
+              onClick={() => setSelectedColor(color[0])}
+              style={{ backgroundColor: color[1] }}
+              className={`w-8 h-8 rounded-full relative flex items-center justify-center transition-transform hover:scale-110 cursor-pointer ${
+                selectedColor === color[0] ? 'ring-2 ring-offset-2 ring-[#3525cd]' : ''
               }`}
               title={color.name}
             />
@@ -80,7 +81,7 @@ export default function ProductInfo({ product }) {
           <Link to="/size-guide" className="text-[#3525cd] font-semibold hover:underline">Size Guide</Link>
         </div>
         <div className="grid grid-cols-5 gap-2">
-          {product.sizes.map((size) => (
+          {[...new Set(product.variants.map(variant => variant.size))].map(size => (
             <button
               key={size}
               onClick={() => setSelectedSize(size)}
@@ -125,9 +126,9 @@ export default function ProductInfo({ product }) {
           </button>
 
           {/* Wishlist Button */}
-          <button className="p-3.5 border border-gray-200 rounded-xl hover:border-gray-300 text-gray-600 hover:text-red-500 transition-colors cursor-pointer bg-white">
+          {/* <button className="p-3.5 border border-gray-200 rounded-xl hover:border-gray-300 text-gray-600 hover:text-red-500 transition-colors cursor-pointer bg-white">
             <Heart size={20} />
-          </button>
+          </button> */}
         </div>
 
         {/* Buy Now Button */}

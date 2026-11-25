@@ -21,10 +21,8 @@ export const useAuthStore = create(( set , get ) => ({
         
         try{
             const res = await api.post('/auth/login',data)
-            console.log(res);
             set({ user: res.data })
         }catch(err){
-            console.log(err)
             set({ errMassage: err.response.data.message });
         }
     },
@@ -32,10 +30,8 @@ export const useAuthStore = create(( set , get ) => ({
     signUp: async(data) =>{
         try{
             const res = await api.post('/auth/signup',data)
-            console.log(res)
             set({ user: res.data })
         }catch(err){
-            console.log(err.response)
             set({ errMassage: err.response });
         }
     }
