@@ -24,7 +24,7 @@ function App() {
       <Routes>
         <Route element={<HeaderAndFooter/>}>
           <Route path="/" element={<Home/>}/>
-          <Route path="/shop/:id" element={<ProductDetails/>}/>
+          <Route path="/shop/:slug" element={<ProductDetails/>}/>
           <Route path="/create-account" element={ !user ? <SignUp/> : <Navigate to="/" />}/>
           <Route path="/login" element={!user ? <Login/> : <Navigate to="/" />}/>
           <Route path="/shop" element={<ShopCatalogPage/>}/>

@@ -26,7 +26,6 @@ export const getAllProducts = async ( req , res ) => {
 }
 
 
-
 export const getAllAccessories = async (req, res) => {
   const TARGET_CATEGORY_SLUGS = [
     'sunglasses-eyewear',
@@ -67,7 +66,62 @@ export const getAllAccessories = async (req, res) => {
     console.error('❌ Error fetching products by categories:', error);
     return res.status(500).json({
       success: false,
-      message: 'حدث خطأ أثناء جلب المنتجات',
+      message: 'An error occurred while fetching products by categories.',
     });
   }
 };
+
+export const getProductBySlug = async (req, res) => {
+    try{
+      const { slug } = req.params;
+      const product = await prisma.product.findUnique({
+        where:{
+          slug: slug
+        },
+        include:{
+          category:true,
+          variants:true,
+          images:true
+        }
+      })
+
+      res.status(200).json({ ...product });
+
+    }catch(err){
+      console.error('Error Fetching Product by Slug:',err);
+    }
+    
+
+}
+
+export const getSimilarProducts = async ( req , res ) => {
+  try{
+      const { slug } = req.params;
+      const product = await prisma.product.findUnique({
+        where:{
+          slug:slug
+        },
+        include:{
+          category:true
+        }
+      })
+      const similarProducts = await prisma.product.findMany({
+        where:{
+          category:{
+            slug:product.category.slug
+          },
+          slug:{
+            not:slug
+          }
+        },
+        include:{
+          category:true,
+          images:true
+        }
+      })
+
+      res.status(200).json([...similarProducts])
+  }catch(err){
+    console.log(err)
+  }
+}

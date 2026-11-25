@@ -3,9 +3,11 @@ import { Link , NavLink } from 'react-router-dom';
 import './Header.css';
 import { Search,  ShoppingBag } from 'lucide-react';
 import { FaRegUser } from "react-icons/fa";
+import { useAuthStore } from '../../../Store/useAuthStore';
 
 
 export default function Header() {
+  const { user } = useAuthStore();
   return (
     <div className='sticky w-full top-0 z-50 backdrop-blur-xs bg-gray-50/95 ' >
       {/* sales Header */}
@@ -47,17 +49,25 @@ export default function Header() {
             </div>
 
             {/* Cart */}
-            <button className="text-gray-700 cursor-pointer rounded-xl hover:text-indigo-700 transition-colors relative">
+            <Link to={'/cart'} className="text-gray-700 cursor-pointer rounded-xl hover:text-indigo-700 transition-colors relative">
               <ShoppingBag size={20} />
               <span className="absolute -top-1.5 -right-2 bg-indigo-700 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                 3
               </span>
-            </button>
+            </Link>
 
-            {/* Profile Pic */}
-            <div className="w-9 h-9 rounded-full flex justify-center items-center overflow-hidden  hover:text-indigo-700 transition-colors cursor-pointer ">
+            {/* Profile Pic or sign in*/}
+            { user ? (
+              <div className="w-9 h-9 rounded-full flex justify-center items-center overflow-hidden  hover:text-indigo-700 transition-colors cursor-pointer ">
               <FaRegUser size={20} />
             </div>
+            ): (
+              <div className='flex items-center justify-center font-semibold text-sm'>
+                <Link className='text-sm text-gray-600 mr-1 hover:text-indigo-700 ' to='/login'> Login </Link>
+                <span className='text-gray-400' > / </span>
+                <Link to='/create-account' className=' text-sm text-gray-600 bg-indigo-50 p-1 ml-1 rounded-sm hover:text-indigo-700 '> SignUp </Link>
+              </div>
+            )}
 
           </div>
 

@@ -1,13 +1,28 @@
-import React from 'react';
+import React , {  useEffect  } from 'react';
+import { useParams } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import ProductGallery from '../Components/ProductDetails/ProductGallery';
 import ProductInfo from '../Components/ProductDetails/ProductInfo';
 import ProductAccordion from '../Components/ProductDetails/ProductAccordion';
 import SustainabilityBanner from '../Components/ProductDetails/SustainabilityBanner';
 import RelatedProducts from '../Components/ProductDetails/RelatedProducts';
+import ProductDetailsSkeleton from '../Components/ProductDetails/ProductDetailsSkeleton';
+import { useProductStore } from '../../Store/useProductStore';
 
 export default function ProductDetails() {
+  const { slug } = useParams();
+  const { product , isGettingProductDetails , getProductBySlug ,getSimilarProducts , similarProducts } = useProductStore();
+  useEffect(() => {
+    window.scrollTo({
+      top:0,
+    }); // Scroll to top when the component mounts
+
+    getProductBySlug(slug);
+    getSimilarProducts(slug);
+  }, []);
   
+  if(isGettingProductDetails || !product) return <ProductDetailsSkeleton />;
+
   const productData = {
     category: 'AURUM SARTORIAL ESSENTIALS',
     title: 'Premium Casual Shirt',
@@ -54,7 +69,7 @@ export default function ProductDetails() {
           <span>/</span>
           <Link to="/shop" className="hover:text-gray-900 transition-colors">Shop</Link>
           <span>/</span>
-          <span className="text-gray-900 font-semibold">{productData.title}</span>
+          <span className="text-gray-900 font-semibold">{product.name}</span>
         </div>
 
       </div>
@@ -64,14 +79,14 @@ export default function ProductDetails() {
           
           {/* معرض الصور (يأخذ 7 أعمدة) */}
           <div className="lg:col-span-7 h-full ">
-            <ProductGallery images={productData.images} />
+            <ProductGallery images={product.images} />
           </div>
 
           {/* تفاصيل الشراء والخيارات (يأخذ 5 أعمدة) */}
           <div className="lg:col-span-5 space-y-6">
-            <ProductInfo product={productData} />
+            <ProductInfo product={product} />
             <ProductAccordion 
-              description={productData.description} 
+              description={product.description} 
               fabric={productData.fabric} 
               shipping={productData.shipping} 
             />

@@ -11,6 +11,9 @@ export default function Home() {
   const { products, getAllProducts } = useProductStore();
   
   useEffect(() => {
+    window.scrollTo({
+      top:0
+    });
     getAllProducts();
   }, []);
 
@@ -21,7 +24,7 @@ export default function Home() {
       
       {/* التأكد من وجود منتج واحد على الأقل قبل عرضه */}
       {products && products.length > 0 && (
-        <ProductSection product={products[5]} />
+        <ProductSection product={products[0]} />
       )}
       {products && products.length > 0 && (
           <NewArrivals products={products} />

@@ -113,7 +113,8 @@ export default function NewArrivals({ products }) {
       {/* Product Cards Grid Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {products.slice(2).map((product) => (
-          <div
+          <Link
+          to={`/shop/${product.slug}`}
             key={product.id}
             className="group bg-white rounded-3xl overflow-hidden border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300 flex flex-col justify-between cursor-pointer"
           >
@@ -168,7 +169,7 @@ export default function NewArrivals({ products }) {
                 </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
